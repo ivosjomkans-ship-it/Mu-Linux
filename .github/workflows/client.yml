@@ -1,5 +1,5 @@
 
-  # Windows x64 con MinGW-w64 (issue #23), compilación cruzada desde Linux.
+  # Windows x64 con MinGW-w64
   mingw:
     needs: changes
     if: needs.changes.outputs.client == 'true'
@@ -17,18 +17,16 @@
       - name: Compilar
         run: cmake --build --preset mingw-x64-release --target mu97k --parallel 4
 
-      - name: Verificar que no dependa de las DLL de MinGW
+      - name: Verificar DLL
         run: |
           set -e
-          found=0
           for exe in $(find build/mingw-x64-release/bin -name '*.exe'); do
-            dlls=$(x86_64-w64-mingw32-objdump -p "$exe" | sed -n 's/.*DLL Name: //p' | tr '\n' ' ')
+            dlls=$(x86_64-w64-mingw32-objdump -p "$exe" | sed -n 's/.*DLL Name: //p')
             echo "$exe: $dlls"
-            if echo "$dlls" | grep -qiE 'libstdc|libgcc|libwinpthread'; then found=1; fi
+            if echo "$dlls" | grep -qiE 'libstdc|libgcc|libwinpthread'; then exit 1; fi
           done
-          [ "$found" = 0 ]
 
-      - name: Упаковать Windows x64 клиент
+      - name: Empaquetar Windows x64
         shell: bash
         run: |
           set -euo pipefail
