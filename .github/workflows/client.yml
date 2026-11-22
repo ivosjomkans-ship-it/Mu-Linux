@@ -11,6 +11,10 @@ on:
 permissions:
   contents: read
 
+defaults:
+  run:
+    working-directory: client
+
 concurrency:
   group: windows-client-${{ github.ref }}
   cancel-in-progress: true
