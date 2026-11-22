@@ -4,11 +4,11 @@
 namespace ServerConfig {
 
 // ConnectServer
-constexpr char           ConnectServerIP[]   = "31.42.120.54";
+constexpr char           ConnectServerIP[]   = "mucyber.eu";
 constexpr unsigned short ConnectServerPort   = 44405;
 
 // GameServer
-constexpr char           GameServerIP[]      = "31.42.120.54";
+constexpr char           GameServerIP[]      = "mucyber.eu";
 constexpr unsigned short GameServerPort      = 55901;
 
 // Server identity
