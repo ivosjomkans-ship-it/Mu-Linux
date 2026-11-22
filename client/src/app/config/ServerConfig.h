@@ -14,7 +14,7 @@ constexpr unsigned short GameServerPort      = 55901;
 // Server identity
 constexpr char           CustomerName[]      = "MuLinux";
 constexpr char           ServerSerial[]      = "TbYehR2hFUPBKgZj";
-constexpr char           ClientVersion[]     = "0.97.40";
+constexpr char           ClientVersion[]     = "0.97.45";
 
 // Server public key
 constexpr char           ServerPublicKey[]   = "";
