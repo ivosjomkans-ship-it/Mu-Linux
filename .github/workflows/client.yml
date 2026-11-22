@@ -328,6 +328,37 @@ jobs:
             if echo "$dlls" | grep -qiE 'libstdc|libgcc|libwinpthread'; then found=1; fi
           done
           [ "$found" = 0 ]
+      - name: Empaquetar cliente Windows x64 completo
+        shell: bash
+        run: |
+          set -euo pipefail
+          package="dist/mu97k-windows-x64"
+          mkdir -p "$package"
+          cp build/mingw-x64-release/bin/main.exe "$package/main.exe"
+
+          while IFS= read -r -d '' file; do
+            relative="${file#bin/Client/}"
+            mkdir -p "$package/$(dirname "$relative")"
+            cp "$file" "$package/$relative"
+          done < <(git ls-files -z -- bin/Client/System bin/Client/Content)
+
+          test -s "$package/main.exe"
+          test -d "$package/System"
+          test -d "$package/Content"
+          test -n "$(find "$package/System" -type f -print -quit)"
+          test -n "$(find "$package/Content" -type f -print -quit)"
+          cat > "$package/README.txt" <<'EOF'
+          MU 0.97k - Windows x64
+          Запуск: main.exe
+          Рядом с main.exe должны находиться папки System и Content.
+          EOF
+
+      - name: Опубликовать полноценный Windows x64 клиент
+        uses: actions/upload-artifact@v6
+        with:
+          name: mu97k-windows-x64-release
+          path: client/dist/mu97k-windows-x64/**
+          if-no-files-found: error
 
   # Windows x64 con MinGW-w64 y WebGPU: Dawn por vcpkg sólo con el backend
   # Vulkan (triplet cmake/triplets/x64-mingw-mu). Corre en Debian 13 porque
